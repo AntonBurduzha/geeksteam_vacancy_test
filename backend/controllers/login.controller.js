@@ -20,7 +20,7 @@ function loginUser(req, res) {
         "Auth":"Denied"
       });
     }
-  }, 2000);
+  }, 500);
 }
 
 module.exports = router;
