@@ -1,9 +1,8 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
+import React, {Component} from 'react'
 import {browserHistory} from 'react-router'
 import LoginPageView from './view.login.page'
 
-export default class LoginPageController extends React.Component {
+export default class LoginPageController extends Component {
   constructor(props){
     super(props);
     this.applyUserValidation = this.applyUserValidation.bind(this);//send req to server
@@ -19,21 +18,18 @@ export default class LoginPageController extends React.Component {
   }
 
   getInputedLogin(event){
-    var self = this;
-    self.setState({'login': event.target.value});
+    this.setState({'login': event.target.value});
   }
 
   getInputedPassword(event){
-    var self = this;
-    self.setState({'password': event.target.value});
+    this.setState({'password': event.target.value});
   }
 
   componentDidUpdate(){
-    var self = this;
     let btnLoading = document.querySelector('.btn-loading');
     let btnLogin = document.querySelector('.btn-login');
 
-    if(self.state.pending){
+    if(this.state.pending){
       btnLogin.style.display = 'none';
       btnLoading.style.display = 'block';
     }
@@ -44,14 +40,12 @@ export default class LoginPageController extends React.Component {
   }
 
   applyLogin(res){
-    var self = this;
-    self.setState({'pending': false});
+    this.setState({'pending': false});
 
     if(res.Auth === "Denied"){
       let userNameField = document.querySelector('.input-login');
       let passwordField = document.querySelector('.input-password');
-      userNameField.style.borderColor = 'red';
-      userNameField.style.borderWidth = '1px';
+      userNameField.classList.add('input-login-wrong');
       userNameField.value = '';
       passwordField.value = '';
     }
@@ -66,21 +60,21 @@ export default class LoginPageController extends React.Component {
     let self = this;
     self.setState({'pending': true});
 
-    let params = JSON.stringify({
-      'Username': self.state.login,
-      'Password': self.state.password
-    });
-
-    let xhr = new XMLHttpRequest();
-    xhr.open("POST", '/login', true);
-    xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
-    xhr.onreadystatechange = () => {
-      if(xhr.status === 200 && xhr.readyState == 4){
-        let access = JSON.parse(xhr.responseText);
+    fetch('/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        'Username': self.state.login,
+        'Password': self.state.password,
+      })
+    }).then(response => {
+      response.json().then(result => {
+        let access = result;
         self.applyLogin(access);
-      }
-    };
-    xhr.send(params);
+      });
+    });
   }
 
   render(){

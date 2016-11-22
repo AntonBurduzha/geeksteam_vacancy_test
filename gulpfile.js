@@ -1,13 +1,14 @@
-var gulp = require('gulp');
-var sass = require('gulp-sass');
-var sassLint = require('gulp-sass-lint');
-var browserSync = require('browser-sync');
-var bsReload = require('browser-sync').reload;
-var eslint = require('gulp-eslint');
-var browserify = require('browserify');
-var source = require('vinyl-source-stream');
-var babelify = require('babelify');
-var nodemon = require('gulp-nodemon');
+const gulp = require('gulp');
+const sass = require('gulp-sass');
+const sassLint = require('gulp-sass-lint');
+const browserSync = require('browser-sync');
+const bsReload = require('browser-sync').reload;
+const eslint = require('gulp-eslint');
+const browserify = require('browserify');
+const source = require('vinyl-source-stream');
+const babelify = require('babelify');
+const nodemon = require('gulp-nodemon');
+const concat = require('gulp-concat');
 
 gulp.task('script', function() {
   return browserify('./frontend/src/scripts/script.js')
@@ -20,7 +21,7 @@ gulp.task('script', function() {
 });
 
 gulp.task('nodemon', function (cb) {
-  var started = false;
+  let started = false;
   return nodemon({
     script: './backend/bin/www.js',
     ignore: [
@@ -39,7 +40,7 @@ gulp.task('browser-sync', ['nodemon'], function (){
   browserSync.init({
     proxy: "localhost:3000",
     files: ["./frontend/dist/**"],
-    port: '1408',
+    port: 1408,
     notify: true
   });
 });
@@ -88,6 +89,12 @@ gulp.task('js-lint', function () {
     .pipe(eslint.failAfterError());
 });
 
+gulp.task('concat-css', function() {
+  return gulp.src('frontend/dist/css/*.css')
+    .pipe(concat('bundle.css'))
+    .pipe(gulp.dest('frontend/dist/css'));
+});
+
 gulp.task('watch', ['browser-sync'], function () {
   gulp.watch('frontend/src/*.html', ['html', bsReload]);
   gulp.watch('frontend/src/**/*.scss', ['sass']);
@@ -95,4 +102,4 @@ gulp.task('watch', ['browser-sync'], function () {
 });
 
 
-gulp.task('build', ['html', 'sass' , 'script', 'js-lint', 'image', 'vendor']);
+gulp.task('build', ['html', 'sass' , 'script', 'js-lint', 'image', 'vendor', 'concat-css']);

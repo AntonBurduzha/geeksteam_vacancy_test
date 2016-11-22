@@ -30,6 +30,7 @@
     "browserify": "^13.1.1",
     "eslint-plugin-react": "^6.7.1",
     "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.1",
     "gulp-eslint": "^3.0.1",
     "gulp-nodemon": "^2.2.1",
     "gulp-postcss": "^6.2.0",

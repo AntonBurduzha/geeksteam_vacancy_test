@@ -1,7 +1,7 @@
-import React from 'react'
+import React, {Component} from 'react'
 import {Link} from 'react-router'
 
-export default class LoginPageView extends React.Component {
+export default class LoginPageView extends Component {
   render(){
     return (
       <div className="col-md-offset-4 col-md-4">
