@@ -1,14 +1,11 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import LoginPageController from './components/login-page/controller.login.page'
-import UserPage from './components/user.page'
-import {Router, Route, IndexRoute, browserHistory} from 'react-router'
+import {Provider} from 'react-redux'
+
+import store from './store'
+import router from './router'
 
 ReactDOM.render(
-  <Router history={browserHistory}>
-    <Route path='/' component={LoginPageController} />
-    <Route path='userpage' component={UserPage} />
-  </Router>,
+  <Provider store={store}>{router}</Provider>,
   document.getElementById('root')
 );
-

@@ -25,7 +25,7 @@ export default class LoginPageView extends Component {
             onChange={this.props.getInputedPassword}
           />
           <button className="btn-submit btn-login">
-            <Link to="/userpage" className="text-btn-link" onClick={this.props.applyUserValidation}>Login &#8594;</Link>
+            <Link to="/userpage" className="text-btn-link" onClick={this.props.applyUserVerification}>Login &#8594;</Link>
           </button>
           <button className="btn-submit btn-loading">
             <img className="logo-loading" src="../img/loading.jpg" alt="loading"/>

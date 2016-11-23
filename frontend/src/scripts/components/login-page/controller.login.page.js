@@ -1,14 +1,17 @@
 import React, {Component} from 'react'
 import {browserHistory} from 'react-router'
+import {connect} from 'react-redux'
+import store from '../../store'
+import checkLogin from '../../actions/action.types'
 import LoginPageView from './view.login.page'
 
-export default class LoginPageController extends Component {
+class LoginPageController extends Component {
   constructor(props){
     super(props);
-    this.applyUserValidation = this.applyUserValidation.bind(this);//send req to server
+    this.applyUserVerification = this.applyUserVerification.bind(this);//send req to server
     this.getInputedPassword = this.getInputedPassword.bind(this);//get string from input and set state.password
     this.getInputedLogin = this.getInputedLogin.bind(this);//get string from input and set state.login
-    this.applyLogin = this.applyLogin.bind(this);//check response from server and show result
+    this.verifyLogin = this.verifyLogin.bind(this);//check response from server and show result
 
     this.state = {
       'login': '',
@@ -28,7 +31,6 @@ export default class LoginPageController extends Component {
   componentDidUpdate(){
     let btnLoading = document.querySelector('.btn-loading');
     let btnLogin = document.querySelector('.btn-login');
-
     if(this.state.pending){
       btnLogin.style.display = 'none';
       btnLoading.style.display = 'block';
@@ -39,9 +41,8 @@ export default class LoginPageController extends Component {
     }
   }
 
-  applyLogin(res){
+  verifyLogin(res){
     this.setState({'pending': false});
-
     if(res.Auth === "Denied"){
       let userNameField = document.querySelector('.input-login');
       let passwordField = document.querySelector('.input-password');
@@ -54,9 +55,8 @@ export default class LoginPageController extends Component {
     }
   }
 
-  applyUserValidation(event){
+  applyUserVerification(event){
     event.preventDefault();
-
     let self = this;
     self.setState({'pending': true});
 
@@ -71,8 +71,8 @@ export default class LoginPageController extends Component {
       })
     }).then(response => {
       response.json().then(result => {
-        let access = result;
-        self.applyLogin(access);
+        store.dispatch(checkLogin(result));
+        self.verifyLogin(this.props.resData);
       });
     });
   }
@@ -83,9 +83,17 @@ export default class LoginPageController extends Component {
         <LoginPageView
           getInputedLogin={this.getInputedLogin}
           getInputedPassword={this.getInputedPassword}
-          applyUserValidation={this.applyUserValidation}
+          applyUserValidation={this.applyUserVerification}
         />
       </div>
     );
   }
 }
+
+const mapStateToProps = function(state) {
+  return {
+    resData: state
+  };
+};
+
+export default connect(mapStateToProps)(LoginPageController);
