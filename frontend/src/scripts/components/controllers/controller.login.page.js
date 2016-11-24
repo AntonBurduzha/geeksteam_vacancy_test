@@ -1,9 +1,11 @@
 import React, {Component} from 'react'
 import {browserHistory} from 'react-router'
 import {connect} from 'react-redux'
+import LoginPageView from '../views/view.login.page'
+
 import store from '../../store'
-import checkLogin from '../../actions/action.types'
-import LoginPageView from './view.login.page'
+import actionCheckUserData from '../../actions/action.login'
+import postUserData from '../../api/api.login'
 
 class LoginPageController extends Component {
   constructor(props){
@@ -60,21 +62,11 @@ class LoginPageController extends Component {
     let self = this;
     self.setState({'pending': true});
 
-    fetch('/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        'Username': self.state.login,
-        'Password': self.state.password,
-      })
-    }).then(response => {
-      response.json().then(result => {
-        store.dispatch(checkLogin(result));
+    postUserData(self.state.login, self.state.password)
+      .then(result => {
+        store.dispatch(actionCheckUserData(result));
         self.verifyLogin(this.props.resData);
       });
-    });
   }
 
   render(){
@@ -83,7 +75,7 @@ class LoginPageController extends Component {
         <LoginPageView
           getInputedLogin={this.getInputedLogin}
           getInputedPassword={this.getInputedPassword}
-          applyUserValidation={this.applyUserVerification}
+          applyUserVerification={this.applyUserVerification}
         />
       </div>
     );
