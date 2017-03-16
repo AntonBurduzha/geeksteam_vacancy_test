@@ -1,11 +1,14 @@
 import React from 'react'
+import {BrowserRouter, Route} from 'react-router-dom'
+
 import LoginPageController from './components/controllers/controller.login.page'
 import UserPage from './components/views/view.user.page'
-import {Router, Route, browserHistory} from 'react-router'
 
 export default(
-  <Router history={browserHistory}>
-    <Route path='/' component={LoginPageController} />
-    <Route path='userpage' component={UserPage} />
-  </Router>
+  <BrowserRouter>
+    <div>
+      <Route exact path='/' component={LoginPageController} />
+      <Route path='/userpage' component={UserPage} />
+    </div>
+  </BrowserRouter>
 );

@@ -4,7 +4,9 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "nodemon": "nodemon ./backend/bin/www"
+    "nodemon": "nodemon ./backend/bin/www",
+    "build": "gulp build",
+    "start": "gulp watch"
   },
   "author": "anton.burduzha@hotmail.com",
   "repository": {
@@ -19,7 +21,8 @@
     "react": "^15.3.2",
     "react-dom": "^15.3.2",
     "react-redux": "^4.4.6",
-    "react-router": "^3.0.0",
+    "react-router": "^4.0.0",
+    "react-router-dom": "^4.0.0",
     "redux": "^3.6.0"
   },
   "devDependencies": {

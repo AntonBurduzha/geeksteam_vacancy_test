@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {browserHistory} from 'react-router'
+import { withRouter } from 'react-router-dom'
 import {connect} from 'react-redux'
 import LoginPageView from '../views/view.login.page'
 
@@ -53,7 +53,7 @@ class LoginPageController extends Component {
       passwordField.value = '';
     }
     else {
-      browserHistory.push('/userpage');
+      this.props.history.push('/userpage');
     }
   }
 
@@ -88,4 +88,4 @@ const mapStateToProps = function(state) {
   };
 };
 
-export default connect(mapStateToProps)(LoginPageController);
+export default connect(mapStateToProps)(withRouter(LoginPageController));
